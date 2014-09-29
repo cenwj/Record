@@ -1,4 +1,4 @@
-install subversion
+1. 安装  yum -y install subversion
 2. 建SVN目录 mkdir /data/svn
 3. 启动服务   svnserve -d -r /data/svn
 4. 开机启动 echo "svnserve -d -r /data/svn" >> /etc/rc.local 
