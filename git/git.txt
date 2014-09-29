@@ -6,7 +6,7 @@ git push origin mydev:dev  提交本地mydev分支到远程dev分支
 php artisan migrate 	 php artisan migrate:refresh --seed 回滚并迁移
 git pull origin dev 更新push
 git pull 更新库代码
-larvel
+laravel
 如果要通过命令行创建控制器，使用如下命令：
 php artisan controller:make PhotoController
 现在我们可以为这个控制器注册一个资源模式的路由：
