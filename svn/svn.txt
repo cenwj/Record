@@ -1,0 +1,111 @@
+nstall subversion
+2. 建SVN目录 mkdir /data/svn
+3. 启动服务   svnserve -d -r /data/svn
+4. 开机启动 echo "svnserve -d -r /data/svn" >> /etc/rc.local 
+5. [root@da svn]# mkdir test
+[root@da svn]# svnadmin create /data/svn/test
+6. 修改配置  vi www_vshida/conf/svnserve.conf
+1. [general]
+2 anon-access = none
+3 auth-access = write
+4 password-db = passwd
+5 authz-db = authz
+6 [sasl
+7. 配置用户帐号密码 vi test/conf/passwd
+	1. cenwenji=sb
+8. 配置用户权限  vi www_vshida/conf/authz
+	1. 添加用户组  [group] 下 admin=cenwenji,da
+    	2. 添加用户权限 [/] 下 @admin = rw
+    	3. 项目权限   [qiuhun:/] @qiuhun=rw
+9. OK
+
+那把report 目录下的东西都删除 了
+重新建 svn库
+rm -rf ../report/*
+ls
+
+svnserv kill 掉
+pkill svnserve
+ps -ef | grep svn
+
+svnserve -d -r /opt/svn
+-r 意思是指定svn 根目录
+/opt/svn就是根目录
+
+cd /opt/svn
+进入根目录创建版本库
+ svnadmin create xiaojj
+
+svn checkout svn://ip地址/xiaojj
+就checkout 下来了
+
+hooks 同步web  注意加可执行权限 两个都加  第一次要手动在web服务器上用户php脚本里的帐号update一次
+
+
+新建文件：svn目录/hooks/post-commit
+
+#!/bin/sh
+path=/usr/local/Cellar/nginx/1.2.7/html/test
+svnuser=da
+svnpasswd=sdfsdf
+
+#库路径
+REPOS="$1"
+#版本号
+REV="$2"
+#改动的文件
+changed=$(svnlook changed -r $REV $REPOS)
+#echo "$changed" >> ~/log.txt
+
+content=`echo $changed | awk '{print $2}'`
+for i in $content
+do
+svn update $path$i --username $svnuser --password $svnpasswd
+done
+这上是shell 版本
+#!/bin/sh
+
+#web目录
+webpath="/data/www/tset"
+
+
+#库路径
+REPOS="$1"
+#版本号
+REV="$2"
+#改动的文件
+changed=$(svnlook changed -r $REV $REPOS)
+#用php脚本执行update
+/usr/local/php/bin/php /data/script/svn_syn_script.php "$changed" "$webpath"  &
+
+
+ /data/script/svn_syn_script.php php执行脚本
+
+<?php
+$web_dir = $argv[2];
+$files = explode("\n", $argv[1]);
+if (!is_array($files)) {$files=(array)$files;};
+
+foreach ($files as $v)
+{
+        // 取文件名
+        $f_tem = trim(substr($v, 2));
+        // 取最顶层目录名
+         $d_tem = substr($f_tem, 0, strpos($f_tem, '/'));
+
+         // SVN copy 对应的文件
+          $f_name = $web_dir . '/' . $f_tem;
+        $cmd = "svn update '$f_name' --username da --password keyword;chown www.www '$f_name'";
+
+        exec($cmd);
+}
+这个是php版本
+
+#!/bin/sh
+export LANG=zh_CN.UTF-8
+REPOS="$1"
+REV="$2"
+svn update /opt/test --username ****--password ****
+#mailer.py commit "$REPOS" "$REV" /path/to/mailer.conf
+~
+
