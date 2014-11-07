@@ -26,7 +26,7 @@ if (!empty($_FILES) && $_POST['token'] == $verifyToken) {
         {
             $sp = str_replace('uploadify.php','',$_SERVER['REQUEST_URI']);
             $json['status'] =1;
-//            $json['msg'] = 'http://data.kapai.com/'. $targetFolder . DIR_SEP . $folder . DIR_SEP .$fileName;
+
             $json['msg'] = $_SERVER['HTTP_HOST']  . $sp . $targetFolder . DIR_SEP . $folder . DIR_SEP .$fileName;
             exit(json_encode($json));
             return '';
