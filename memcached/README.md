@@ -1,4 +1,5 @@
 memcached 安装
+
 1.下载 memcached libevent
 分别将 libevent-1.1a.tar.gz 和 memcached-1.1.12.tar.gz 解开包、编译、安装：
 # tar -xzf libevent-1.1a.tar.gz
