@@ -40,7 +40,8 @@ PHP 如何作为 memcached 客户端
 本文选用第二种方式，虽然效率会比扩展库稍差一些，但问题不大。
 
 PHP memcached 应用示例
-首先 下载 memcached-client.php，在下载了 memcached-client.php 之后，就可以通过这个文件中的类“memcached”对 memcached 服务进行操作了。其实代码调用非常简单，主要会用到的方法有 add()、get()、replace() 和 delete()，方法说明如下：
+首先 下载 memcached-client.php，在下载了 memcached-client.php 之后，就可以通过这个文件中的类“memcached”
+对 memcached 服务进行操作了。其实代码调用非常简单，主要会用到的方法有 add()、get()、replace() 和 delete()，方法说明如下：
 add ($key, $val, $exp = 0)
 往 memcached 中写入对象，$key 是对象的唯一标识符，$val 是写入的对象数据，$exp 为过期时间，单位为秒，默认为不限时间；
 get ($key)
